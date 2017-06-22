@@ -26,16 +26,17 @@ angular.module(moduleName, ['ngResource', 'ngComponentRouter', 'credit-cards', '
         customer: '<'
     },
     $routeConfig: [
-         { path: '/orders/...', name: 'Orders', component: 'vcAccountOrders' },
+         { path: '/orders/...', name: 'Orders', component: 'vcAccountOrders'},
          { path: '/subscriptions/...', name: 'Subscriptions', component: 'vcAccountSubscriptions' },
          { path: '/quotes', name: 'Quotes', component: 'vcAccountQuotes' },
          { path: '/profile', name: 'Profile', component: 'vcAccountProfileUpdate', useAsDefault: true },
          { path: '/addresses', name: 'Addresses', component: 'vcAccountAddresses' },
          { path: '/changePassword', name: 'PasswordChange', component: 'vcAccountPasswordChange' },
          { path: '/companyInfo', name: 'CompanyInfo', component: 'vcAccountCompanyInfo' },
-         { path: '/companyMembers/...', name: 'CompanyMembers', component: 'vcAccountCompanyMembers' }
+         { path: '/companyMembers/...', name: 'CompanyMembers', component: 'vcAccountCompanyMembers' },
+         { path: '/roles', name: 'Roles', component: 'vcAccountRoles' }
     ],
-    controller: ['storefront.accountApi', 'storefrontApp.mainContext', 'loadingIndicatorService', function (accountApi, mainContext, loader) {
+    controller: ['$scope', 'storefront.accountApi', 'storefrontApp.mainContext', 'authService', 'loadingIndicatorService', function ($scope, accountApi, mainContext, authService, loader) {
         var $ctrl = this;
         $ctrl.loader = loader;
 
@@ -69,17 +70,13 @@ angular.module(moduleName, ['ngResource', 'ngComponentRouter', 'credit-cards', '
             });
         };
 
-        $ctrl.getCustomerOrganization = function (callback) {
-            loader.wrapLoading(function () {
-                return accountApi.getCustomerOrganization(callback).$promise;
-            });
-        };
-
-        $ctrl.updateCustomerOrganization = function (updateRequest) {
-            loader.wrapLoading(function () {
-                return accountApi.updateCustomerOrganization(updateRequest).$promise;
-            });
-        };
+        $scope.$watch(function() {
+            return mainContext.customer;
+        }, function (customer) {
+            if (customer) {
+                authService.fillAuthData();
+            }
+        });
     }]
 })
 
