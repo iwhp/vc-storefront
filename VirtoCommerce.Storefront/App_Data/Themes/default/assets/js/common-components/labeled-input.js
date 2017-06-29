@@ -10,6 +10,7 @@
         type: '@?',
         required: '<',
         requiredError: '@?',
+        disabled: '<',
         autofocus: '<'
     },
     controller: [function () {
