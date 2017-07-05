@@ -1,5 +1,4 @@
-﻿o main application
-var moduleName = "storefront.account";
+﻿var moduleName = "storefront.account";
 
 if (storefrontAppDependencies !== undefined) {
     storefrontAppDependencies.push(moduleName);
